@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Poll Voting App</title>
+   
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>Poll Voting</h2>
+        <div class="form-group">
+            <div>
+                <input type="radio" id="johnDoe" name="candidate" value="John Doe">
+                <label for="johnDoe">John Doe</label>
+            </div>
+            <div>
+                <input type="radio" id="alexWillam" name="candidate" value="Alex Willam">
+                <label for="alexWillam">Alex Willam</label>
+            </div>
+            <div>
+                <input type="radio" id="preranaNawar" name="candidate" value="Prerana Nawar">
+                <label for="preranaNawar">Prerana Nawar</label>
+            </div>
+        </div>
+        <button class="btn btn-primary" onclick="submitVote()">Vote</button>
+
+        <h3 class="mt-4">Results</h3>
+        <ul id="resultsList" class="list-group"></ul>
+
+        <h3 class="mt-4">Winner</h3>
+        <p id="winnerDisplay"></p>
+    </div>
+
+    
+    <script>
+       
+        let votes = {
+            "John Doe": 0,
+            "Alex Willam": 0,
+            "Prerana Nawar": 0
+        };
+
+       
+        function submitVote() {
+            const selectedCandidate = document.querySelector('input[name="candidate"]:checked');
+            if (!selectedCandidate) {
+                alert("Please select a candidate to vote.");
+                return;
+            }
+
+            const candidateName = selectedCandidate.value;
+            votes[candidateName] += 1;
+            
+            displayResults();
+            determineWinner();
+        }
+
+       
+        function displayResults() {
+            const resultsList = document.getElementById('resultsList');
+            resultsList.innerHTML = '';
+            
+            for (const candidate in votes) {
+                if (votes[candidate] > 0) {
+                    const listItem = document.createElement('li');
+                    listItem.className = 'list-group-item';
+                    listItem.textContent = `${candidate}: ${votes[candidate]} `;
+                    resultsList.appendChild(listItem);
+                }
+            }
+        }
+
+        function determineWinner() {
+            const maxVotes = Math.max(...Object.values(votes));
+            const winners = Object.keys(votes).filter(candidate => votes[candidate] === maxVotes);
+
+            const winnerDisplay = document.getElementById('winnerDisplay');
+            if (winners.length === 1) {
+                winnerDisplay.textContent = `The winner is ${winners[0]} with ${maxVotes} votes.`;
+            } else {
+                winnerDisplay.textContent = `It's a tie between ${winners.join(', ')} with ${maxVotes} votes each.`;
+            }
+        }
+    </script>
+
+    
+</body>
+</html>
